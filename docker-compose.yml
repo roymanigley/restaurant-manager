@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    volumes:
+      - app-static-files:/var/data/app/static
+      - app-media-files:/var/data/app/media
+      - app-db-files:/var/data/app/db
+    environment:
+      DJANGO_DEBUG: 'false'
+      DJANGO_ALLOWED_HOSTS: '*'
+      DJANGO_CSRF_TRUSTED_ORIGINS: 'http://127.0.0.1:9080'
+
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "9080:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - app-static-files:/app/static:ro
+      - app-media-files:/app/media:ro
+
+volumes:
+  app-static-files:
+  app-media-files:
+  app-db-files:
