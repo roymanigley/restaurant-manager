@@ -26,5 +26,5 @@ urlpatterns = [
     # ),
     # ReDoc route
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    # re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ]
