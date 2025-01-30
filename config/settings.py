@@ -26,10 +26,11 @@ SECRET_KEY = 'django-insecure-hjo!w9vtclk@td7f9sfm#yv1!^mdutqm!9q-pt-kj)2x@aga&_
 DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true'
 
 ALLOWED_HOSTS = os.environ.get(
-    'DJANGO_ALLOWED_HOSTS', 'http://localhost http://127.0.0.1'
+    'DJANGO_ALLOWED_HOSTS', 'localhost:8000 127.0.0.1:8000 localhost 127.0.0.1'
 ).split(' ')
+
 CSRF_TRUSTED_ORIGINS = os.environ.get(
-    'DJANGO_CSRF_TRUSTED_ORIGINS', 'http://localhost:8000 http://127.0.0.1:8000'
+    'DJANGO_CSRF_TRUSTED_ORIGINS', 'http://localhost:8000 http://127.0.0.1:8000 http://localhost:420 http://127.0.0.1:420'
 ).split(' ')
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -59,8 +60,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'config.custom_authentication.CustomSessionAuthentication',
+        #
+        # 'rest_framework.authentication.BasicAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }

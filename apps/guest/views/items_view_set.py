@@ -19,14 +19,7 @@ class ItemViewSet(ListModelMixin, GenericViewSet):
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    @extend_schema(
-        responses={
-            200: {
-                "type": "array",
-                "items": {"type": "string"}
-            }
-        }
-    )
+    @extend_schema(summary='guests_items_available_retrieve_by_category')
     @action(url_path='available/(?P<occupation_id>[^/.]+)/(?P<category>[^/.]+)', detail=False,
             serializer_class=ItemSerializer, permission_classes=[ActiveOccupationPermission]
             )

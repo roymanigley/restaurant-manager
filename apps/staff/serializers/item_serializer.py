@@ -4,7 +4,8 @@ from apps.core.models import Item, ItemImage
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField(source='image.image', read_only=True, default=None)
+    image = serializers.SerializerMethodField(
+        source='image.image', read_only=True, default=None)
 
     def get_image(self, instance: Item):
         item_image = ItemImage.objects.get_by_item_id(item_id=instance.id)

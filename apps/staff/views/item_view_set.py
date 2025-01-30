@@ -29,7 +29,8 @@ class ItemViewSet(ModelViewSet):
         image_instance = ItemImage.objects.get_by_item_id(item_id=pk)
         if image_instance is None:
             image_instance = ItemImage.objects.create(item_id=pk)
-        serializer = ItemImageSerializer(instance=image_instance, data=request.data)
+        serializer = ItemImageSerializer(
+            instance=image_instance, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(data=serializer.data, status=status.HTTP_200_OK)
