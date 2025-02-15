@@ -47,7 +47,6 @@ class RestaurantUserDetailSerializer(RestaurantUserSerializer):
 
 
 class PasswordSerializer(serializers.Serializer):
-
     password_one = serializers.CharField()
     password_two = serializers.CharField()
 
@@ -62,3 +61,7 @@ class PasswordSerializer(serializers.Serializer):
 
     def get_validated_password(self) -> str:
         return self.validated_data['password_one']
+
+
+class RestaurantUserPermissionSerializer(serializers.Serializer):
+    permission_ids = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
