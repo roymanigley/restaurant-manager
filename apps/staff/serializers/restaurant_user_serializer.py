@@ -1,3 +1,4 @@
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -22,6 +23,14 @@ class RestaurantUserSerializer(serializers.ModelSerializer):
             'restaurant',
         ]
 
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.get('password'))
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data.get('password'))
+        return super().update(instance, validated_data)
 
 class RestaurantUserDetailSerializer(RestaurantUserSerializer):
     permissions = serializers.ListField(read_only=True)
