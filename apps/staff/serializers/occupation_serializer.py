@@ -8,6 +8,8 @@ from apps.core.models import Occupation
 
 class OccupationSerializer(serializers.ModelSerializer):
 
+    table_name = serializers.CharField(source='table.name', read_only=True)
+
     def create(self, validated_data):
         self._validate_start_end(
             validated_data['start'],
