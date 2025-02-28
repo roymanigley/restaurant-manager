@@ -10,7 +10,7 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def get_item_image(self, instance: Order):
         item_image = ItemImage.objects.get_by_item_id(item_id=instance.item.id)
-        if item_image:
+        if item_image and item_image.image.storage.exists(item_image.image.name):
             return item_image.image.url
         return None
 

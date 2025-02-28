@@ -1,7 +1,7 @@
 FROM python:3.11-alpine
 
 RUN apk update && apk upgrade --no-cache
-RUN apk add gettext su-exec busybox openrc
+RUN apk add gettext su-exec busybox openrc tk
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

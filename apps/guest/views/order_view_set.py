@@ -2,6 +2,7 @@ from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.mixins import ListModelMixin
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -14,11 +15,15 @@ from apps.guest.serializers import OrderSerializer
 @extend_schema(tags=['Guest - Orders'])
 class OrderViewSet(ListModelMixin, GenericViewSet):
     permission_classes = [ActiveOccupationPermission]
+    queryset = Order.objects.none()
 
     @extend_schema(exclude=True)
     def list(self, request, *args, **kwargs):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    @extend_schema(
+        responses={status.HTTP_200_OK: OrderSerializer(many=True)},
+    )
     @action(
         url_path='(?P<occupation_id>[^/.]+)', detail=False, methods=['GET'],
         serializer_class=OrderSerializer, permission_classes=[ActiveOccupationPermission]
