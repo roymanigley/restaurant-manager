@@ -1,20 +1,21 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema, OpenApiParameter
+from rest_framework import serializers
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from apps.core.models import Order
-from apps.staff.filters import OrderFilter
 from apps.staff.permissions import OrderPermission
 from apps.staff.serializers import OrderSerializer
 
+
+class OrderQuerySerializer(serializers.Serializer):
+    start = serializers.DateField(required=False, write_only=True)
+    end = serializers.DateField(required=False, write_only=True)
 
 @extend_schema(tags=['Staff - Orders'])
 class OrderViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, OrderPermission]
     serializer_class = OrderSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = OrderFilter
 
     def get_queryset(self):
         return Order.objects.get_by_restaurant_id(
@@ -24,14 +25,14 @@ class OrderViewSet(ModelViewSet):
     @extend_schema(
         parameters=[
             OpenApiParameter(
-                name='date_range_after',
+                name='start',
                 type=str,
                 location=OpenApiParameter.QUERY,
                 description='Start date for filtering (YYYY-MM-DD)',
                 required=False
             ),
             OpenApiParameter(
-                name='date_range_before',
+                name='end',
                 type=str,
                 location=OpenApiParameter.QUERY,
                 description='End date for filtering (YYYY-MM-DD)',
@@ -40,4 +41,16 @@ class OrderViewSet(ModelViewSet):
         ]
     )
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        serializer = OrderQuerySerializer(data=request.query_params)
+        serializer.is_valid(raise_exception=True)
+        start = serializer.validated_data.get('start')
+        end = serializer.validated_data.get('end')
+        queryset = self.get_queryset()
+        if start and end:
+            queryset = queryset.filter(
+                occupation__start__gte=start,
+                occupation__start__lte=end,
+            )
+        paged_queryset = self.paginate_queryset(queryset)
+        data = self.get_serializer(instance=paged_queryset, many=True).data
+        return self.get_paginated_response(data)
