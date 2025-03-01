@@ -9,6 +9,7 @@ services:
       DJANGO_DEBUG: 'false'
       DJANGO_ALLOWED_HOSTS: 'restaurant-manager.eutima.ch 127.0.0.1 localhost eag-test-kydo-app-01.net.eutima.ch'
       DJANGO_CSRF_TRUSTED_ORIGINS: 'https://restaurant-manager.eutima.ch http://eag-test-kydo-app-01.net.eutima.ch:9080'
+    restart: always
 
   nginx:
     image: nginx:stable-alpine3.17
@@ -18,6 +19,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - app-static-files:/app/static:ro
       - app-media-files:/app/media:ro
+    restart: always
 
 volumes:
   app-static-files:
