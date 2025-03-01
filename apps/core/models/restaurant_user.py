@@ -32,3 +32,6 @@ class RestaurantUser(AbstractUser):
 
     def __str__(self):
         return f'{self.username} ({self.restaurant.name})'
+
+    class Meta:
+        ordering = ('first_name', 'last_name')

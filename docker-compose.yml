@@ -19,6 +19,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - app-static-files:/app/static:ro
       - app-media-files:/app/media:ro
+      - ./nginx/restaurant-manager-gui:/app/restaurant-manager-gui:ro
     restart: always
 
 volumes:

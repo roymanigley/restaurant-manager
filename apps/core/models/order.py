@@ -48,3 +48,6 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.item.name} ({self.occupation})'
+
+    class Meta:
+        ordering = ('-occupation__start',)
