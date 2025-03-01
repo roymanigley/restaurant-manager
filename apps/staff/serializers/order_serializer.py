@@ -4,7 +4,8 @@ from apps.core.models import Order, ItemImage
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    table_name = serializers.CharField(source='occupation__table__name', read_only=True)
+    table_name = serializers.CharField(source='occupation.table.name', read_only=True)
+    date = serializers.DateTimeField(source='occupation.start', read_only=True)
     item_name = serializers.CharField(read_only=True, source='item.name')
     item_image = serializers.SerializerMethodField(default=None, read_only=True, source='item.image.image')
 
