@@ -9,6 +9,8 @@ from apps.core.models import Occupation
 class OccupationSerializer(serializers.ModelSerializer):
 
     table_name = serializers.CharField(source='table.name', read_only=True)
+    waiter_first_name = serializers.CharField(source='waiter.first_name', read_only=True)
+    waiter_last_name = serializers.CharField(source='waiter.last_name', read_only=True)
 
     def create(self, validated_data):
         self._validate_start_end(
